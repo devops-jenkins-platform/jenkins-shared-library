@@ -7,6 +7,6 @@ def call(Map config = [:]) {
 
     def scannerHome = tool 'SonarScanner'
     withSonarQubeEnv('sonar-server') {
-        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectName=${projectName} -Dsonar.projectKey=${projectKey}"
+        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectName=${projectName} -Dsonar.projectKey=${projectKey} -Dsonar.java.binaries=."
     }
 }
