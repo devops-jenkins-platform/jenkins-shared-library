@@ -1,6 +1,9 @@
-def call(String imageName, String credentialsId) {
-    echo "Logging in to Harbor"
+def call(String imageName, String imageTag, String harborUrl, String credentialsId) {
+    def localImage = "${imageName}:${imageTag}"
+    def harborImage = "${harborUrl}/${imageName}:${imageTag}"
 
+    echo "Logging in to Harbor: ${harborUrl}"
+    
     withCredentials([
         usernamePassword(
             credentialsId: credentialsId,
@@ -11,18 +14,15 @@ def call(String imageName, String credentialsId) {
 
         sh """
             echo "\$HARBOR_PASSWORD" | docker login \
+                ${harborUrl} \
                 -u "\$HARBOR_USERNAME" \
-                --password-stdin \
-                ${getRegistry(imageName)}
+                --password-stdin
 
-            docker push ${imageName}
+            docker tag ${localImage} ${harborImage}
+            docker push ${harborImage}
         """
     }
 
-    echo "Docker image pushed successfully: ${imageName}"
-}
-
-
-def getRegistry(String imageName) {
-    return imageName.split('/')[0]
+    echo "Docker image pushed successfully: ${harborImage}"
+    return harborImage
 }
