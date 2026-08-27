@@ -31,7 +31,10 @@ pipeline {
         }
         stage('File System Scan') {
             steps {
-                trivyScan(scanType: 'fs', target: '.', reportName: 'trivy-fs-report.html')
+                container('trivy'){
+                    trivyScan(scanType: 'fs', target: '.', reportName: 'trivy-fs-report.html')
+                }
+                
             }
         }
         stage('SonarQube Analysis') {
