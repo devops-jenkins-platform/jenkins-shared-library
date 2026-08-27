@@ -8,7 +8,7 @@ def call(String language) {
             python3 -m build
         """
     } else if (language == 'nodejs') {
-        sh "npm install"
+        sh "npm package"
     } else {
         error "Unsupported language: ${language}"
     }
