@@ -5,6 +5,6 @@ def call(Map config = [:]) {
     def mvnCmd = "mvn deploy"
 
     withMaven(globalMavenSettingsConfig: mavenSettingsConfig, maven: mavenTool) {
-        sh mvnCmd
+        sh mvnCmd 
     }
 }
