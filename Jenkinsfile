@@ -11,22 +11,22 @@ pipeline {
     stages {
         stage('Git Checkout') {
            steps {
-               gitCheckout('main', 'https://github.com/devops-jenkins-platform/Boardgame.git', 'github-creds')
+               gitCheckout('main', 'https://github.com/devops-jenkins-platform/simple-webapp-flask', 'github-creds')
            }
         }
         stage('Setup Tools') {
            steps {
-              setupTool("maven")
+              setupTool("python")
            }
         }
         stage('Compile') {
             steps {
-                compileApp("maven")
+                compileApp("python")
             }
         }
         stage('Test') {
             steps {
-                testApp("maven")
+                testApp("python")
             }
         }
         stage('File System Scan') {
@@ -55,7 +55,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                buildApp("maven")
+                buildApp("python")
             }
         }
 
