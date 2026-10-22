@@ -1,0 +1,41 @@
+pipeline:
+  id: pipeline_devops_jenkins_platform_jenkins_shared_library_build_1f90
+  name: pipeline_devops_jenkins_platform_jenkins_shared_library_build_1f90
+  stages:
+    - name: Build and Validate
+      clone:
+        enabled: true
+      cache:
+        enabled: true
+      runtime: cloud
+      steps:
+        - name: Validate Groovy Syntax
+          id: validate_groovy
+          run:
+            container:
+              image: groovy:4.0-jdk17
+            shell: bash
+            script: |-
+              echo "Validating Groovy syntax for Jenkins shared library..."
+
+              # Find all Groovy files and validate syntax
+              validation_failed=0
+
+              for file in $(find . -name "*.groovy" -type f); do
+                echo "Validating: $file"
+                if ! groovyc -d /tmp/classes "$file" 2>&1; then
+                  echo "ERROR: Syntax error in $file"
+                  validation_failed=1
+                else
+                  echo "OK: $file"
+                fi
+              done
+
+              if [ "$validation_failed" -eq 1 ]; then
+                echo "Groovy syntax validation failed"
+                exit 1
+              fi
+
+              echo "All Groovy files validated successfully"
+  tags:
+    onboarding: "true"
